@@ -34,7 +34,7 @@ if(isset($_POST['alive_uids'])) {
     $paste_content = 'Alive UIDs:' . PHP_EOL . $alive_uids;
 
     // Your Pastebin API key
-    $api_key = '2YNOMAehI4fvZTN5NOH3eonEo53bw2vL
+    $api_key = '2YNOMAehI4fvZTN5NOH3eonEo53bw2vL'
 ';
 
     // Create a new paste on Pastebin
