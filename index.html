@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Axl Clone - Check Live UID Clone</title>
+    <link rel="shortcut icon" href="assets/media/favicons/favicon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/media/favicons/favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/media/favicons/favicon.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
+    <link rel="stylesheet" id="css-main" href="assets/css/dashmix.min.css">
+    <link rel="stylesheet" id="css-theme" href="assets/css/themes/xeco.min.css">
+    <style>
+        html{font-size: 14px}
+        .tooltip-inner {
+            max-width: 500px;
+            text-align: left;
+            font-size: 14px;
+            padding: 15px;
+            background: #000;
+        }
+        .smini-hidden{
+            background: #008037;
+        }
+    </style>
+</head>
+<body>
+    <main id="main-container">
+        <div style="background-image: url('assets/media/photos/photo16%402x.jpg'); background-repeat: no-repeat; background-attachment: fixed;">
+            <div class="content content-full" style="background: #607D8B; opacity: 0.7">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb breadcrumb-alt bg-light px-4 push">
+                        <li class="breadcrumb-item active" aria-current="page">Check Live UID Clone</li>
+                    </ol>
+                </nav>
+                <div class="row push">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <textarea wrap="off" class="form-control" id="listclone" name="example-textarea-input" rows="8" placeholder="No Data" style="font-size: 14px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" id="checkliveuid" class="btn btn-success" onclick="check_live_uid();">Check Live UID</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row push">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <textarea wrap="off" class="form-control form-control-alt" id="listclonelive" name="example-textarea-input" rows="8" placeholder="No Data" style="font-size: 14px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info" onclick="copyToClipboard_live();">Copy list LIVE</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <textarea wrap="off" class="form-control form-control-alt is-invalid" id="listclonedie" name="example-textarea-input" rows="8" placeholder="No Data" style="font-size: 14px;"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button" class="btn btn-info" onclick="copyToClipboard_die();">Copy List DIE</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="position: sticky; bottom: 0; margin-bottom: 0;">
+                    <span class="live badge badge-success" style="display: none;">Live: <span class="" id="live">0</span></span>
+                    <span class="die badge badge-danger" style="display: none;">Die: <span class="" id="die">0</span></span>
+                    <div class="progress push" style="display: none; position: sticky; bottom: 0; margin-bottom: 0;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 1%;" aria-valuenow="1" aria-valuemin="0" aria-valuemax="100">
+                            <span class="font-size-sm font-w600">1%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="assets/js/dashmix.core.min.js"></script>
+    <script src="assets/js/dashmix.app.min.js"></script>
+    <script src="assets/js/plugins/bootstrap-notify/bootstrap-notify.min.js"></script>
+    <script>
+        jQuery(function() {
+            Dashmix.helpers('notify');
+        });
+    </script>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function store_alive_uids(alive_uids) {
+            $.ajax({
+                url: 'store_alive_uids.php', // Path to your PHP script
+                type: 'POST',
+                data: { alive_uids: alive_uids },
+                success: function(response) {
+                    console.log(response); // Output the response from the server
+                    // Optionally, you can display a notification to the user here
+                },
+                error: function(xhr, status, error) {
+                    console.error(error); // Log any errors to the console
+                    // Optionally, you can display an error message to the user here
+                }
+            });
+        }
+
+        var listclone, arrclone, n, c;
+        var live, die;
+        function check_live_uid() {
+            $('#checkliveuid').prop('disabled', true);
+            $('#listclonelive').val("");
+            $('#listclonedie').val("");
+            $('.progress').show();
+            n = 0;
+            live = 0;
+            die = 0;
+            listclone = $('#listclone').val().trim();
+            arrclone = listclone.split('\n');
+            c = arrclone.length;
+            for (var i = 0; i < 20; i++) {
+                check_live_uid_progress();
+            }
+        }
+
+        function check_live_uid_progress() {
+            n = n + 1;
+            var m = n - 1;
+            var uid = get_uid(arrclone[m]);
+            var url = 'https://graph.facebook.com/' + uid + '/picture?type=normal';
+            fetch(url).then((response) => {
+                if (/100x100/.test(response.url)) {
+                    $('.live').show();
+                    live++;
+                    $('#live').html(live);
+                    $('#listclonelive').val($('#listclonelive').val() + arrclone[m] + '\n');
+                } else {
+                    $('.die').show();
+                    die++;
+                    $('#die').html(die);
+                    $('#listclonedie').val($('#listclonedie').val() + arrclone[m] + '\n');
+                }
+                var width = (n / c) * 100;
+                $('.progress-bar').css('width', width + '%').attr('aria-valuenow', width);
+                $('.progress-bar').html('<span class="font-size-sm font-w600">' + Math.round(width) + '%</span>');
+                if (n < c) {
+                    check_live_uid_progress();
+                } else {
+                    $('.progress').hide();
+                    $('#checkliveuid').prop('disabled', false);
+                    var alive_uids = $('#listclonelive').val();
+                    store_alive_uids(alive_uids); // Call function to store alive UIDs
+                }
+            });
+        }
+
+        function get_uid(data) {
+            var clone = data.split("|");
+            return clone[0];
+        }
+    </script>
+</body>
+</html>
