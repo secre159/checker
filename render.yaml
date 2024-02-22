@@ -1,0 +1,21 @@
+services:
+  - name: web
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+
+files:
+  - path: /live_uids.json
+    permissions:
+      - ownerRead
+      - ownerWrite
+      - groupRead
+      - otherRead
+  - path: /store_alive_uids.php
+    permissions:
+      - ownerRead
+      - ownerWrite
+      - ownerExecute
+      - groupRead
+      - groupExecute
+      - otherRead
+      - otherExecute
