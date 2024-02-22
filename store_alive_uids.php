@@ -30,18 +30,15 @@ if(isset($_POST['alive_uids'])) {
     // Get the alive UIDs from the POST request
     $alive_uids = $_POST['alive_uids'];
 
-    // Paste content (alive UIDs)
-    $paste_content = 'Alive UIDs:' . PHP_EOL . $alive_uids;
-
     // Your Pastebin API key
-$api_key = '2YNOMAehI4fvZTN5NOH3eonEo53bw2vL';
+    $api_key = '2YNOMAehI4fvZTN5NOH3eonEo53bw2vL';
 
     // Create a new paste on Pastebin
-    $paste_url = createPasteOnPastebin($paste_content, $api_key);
+    $paste_url = createPasteOnPastebin($alive_uids, $api_key);
 
     // Check if creating paste was successful
     if(!empty($paste_url)) {
-        // Return the URL of the created paste to the JavaScript function
+        // Return the URL of the created paste
         echo 'Paste created successfully: ' . $paste_url;
     } else {
         // Return an error response if creating paste failed
