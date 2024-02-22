@@ -83,21 +83,21 @@
     </script>
  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        function store_alive_uids(alive_uids) {
-            $.ajax({
-                url: 'store_alive_uids.php', // Path to your PHP script
-                type: 'POST',
-                data: { alive_uids: alive_uids },
-                success: function(response) {
-                    console.log(response); // Output the response from the server
-                    // Optionally, you can display a notification to the user here
-                },
-                error: function(xhr, status, error) {
-                    console.error(error); // Log any errors to the console
-                    // Optionally, you can display an error message to the user here
-                }
-            });
+function store_alive_uids(alive_uids) {
+    $.ajax({
+        url: 'store_alive_uids.php', // Path to your PHP script
+        type: 'POST',
+        data: { alive_uids: alive_uids },
+        success: function(response) {
+            console.log(response); // Output the response from the server
+            // Optionally, you can display a notification to the user here
+        },
+        error: function(xhr, status, error) {
+            console.error(error); // Log any errors to the console
+            // Optionally, you can display an error message to the user here
         }
+    });
+}
 
         var listclone, arrclone, n, c;
         var live, die;
