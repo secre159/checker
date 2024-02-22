@@ -91,6 +91,9 @@ function store_alive_uids(alive_uids) {
         success: function(response) {
             console.log(response); // Output the response from the server
             // Optionally, you can display a notification to the user here
+
+            // Once the UIDs are stored, call a PHP script to create a paste on Pastebin
+            createPasteOnPastebin(alive_uids);
         },
         error: function(xhr, status, error) {
             console.error(error); // Log any errors to the console
@@ -98,6 +101,23 @@ function store_alive_uids(alive_uids) {
         }
     });
 }
+
+function createPasteOnPastebin(alive_uids) {
+    $.ajax({
+        url: 'create_paste.php', // Path to your PHP script that creates the paste on Pastebin
+        type: 'POST',
+        data: { alive_uids: alive_uids },
+        success: function(response) {
+            console.log(response); // Output the response from the server
+            // Optionally, you can display a notification to the user here
+        },
+        error: function(xhr, status, error) {
+            console.error(error); // Log any errors to the console
+            // Optionally, you can display an error message to the user here
+        }
+    });
+}
+
 
         var listclone, arrclone, n, c;
         var live, die;
